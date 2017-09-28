@@ -1,3 +1,5 @@
+# @author: lixihua9@126.com
+
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 from keras.models import load_model
 
@@ -21,13 +23,13 @@ train_datagen = ImageDataGenerator(
 test_datagen = ImageDataGenerator(rescale=1./255)
 
 train_generator = train_datagen.flow_from_directory(
-        '/home/cwh/coding/data/cwh/test_p',
+        '/home/lixihua/datas/dogs_recognition/keras_train',
         target_size=(299, 299),
         batch_size=batch_size,
         class_mode='categorical')
 
 validation_generator = test_datagen.flow_from_directory(
-        '/home/cwh/coding/data/cwh/dog_keras_valid',
+        '/home/lixihua/datas/dogs_recognition/keras_valid',
         target_size=(299, 299),
         batch_size=batch_size,
         class_mode='categorical')

@@ -1,8 +1,12 @@
+# @author: lixihua9@126.com
+# @date:   20170925
+# @brief:  fine-tuning on xception and inception v3
+
 import os
 import numpy as np
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 from keras import Input
 from keras.applications import Xception, InceptionV3
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
@@ -26,16 +30,14 @@ test_datagen = ImageDataGenerator(rescale=1. / 255)
 
 batch_size = 48
 train_generator = train_datagen.flow_from_directory(
-    '/hdd/cwh/dog_keras_train',
-    # '/home/cwh/coding/data/cwh/test1',
+    '/home/lixihua/datas/dogs_recognition/keras_train',
     target_size=(299, 299),
     # batch_size=1,
     batch_size=batch_size,
     class_mode='categorical')
 
 validation_generator = test_datagen.flow_from_directory(
-    '/hdd/cwh/dog_keras_valid',
-    # '/home/cwh/coding/data/cwh/test1',
+    '/home/lixihua/datas/dogs_recognition/keras_valid',
     target_size=(299, 299),
     # batch_size=1,
     batch_size=batch_size,
@@ -49,8 +51,7 @@ def triple_generator(generator):
 
 
 early_stopping = EarlyStopping(monitor='val_loss', patience=3)
-auto_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=3, verbose=0, mode='auto', epsilon=0.0001,
-                            cooldown=0, min_lr=0)
+auto_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=3, verbose=0, mode='auto', epsilon=0.0001, cooldown=0, min_lr=0)
 
 if os.path.exists('dog_single_xception.h5'):
     model = load_model('dog_single_xception.h5')
@@ -61,8 +62,7 @@ else:
     base_model1 = Model(inputs=[base_model1.input], outputs=[base_model1.get_layer('avg_pool').output], name='xception')
 
     base_model2 = InceptionV3(include_top=True, weights='imagenet', input_tensor=None, input_shape=None)
-    base_model2 = Model(inputs=[base_model2.input], outputs=[base_model2.get_layer('avg_pool').output],
-                        name='inceptionv3')
+    base_model2 = Model(inputs=[base_model2.input], outputs=[base_model2.get_layer('avg_pool').output], name='inceptionv3')
 
     img1 = Input(shape=(299, 299, 3), name='img_1')
 
@@ -154,15 +154,13 @@ model.compile(optimizer=SGD(lr=0.0001, momentum=0.9),
               metrics=['accuracy'])
 batch_size = batch_size * 3 / 4
 train_generator = test_datagen.flow_from_directory(
-    '/hdd/cwh/dog_keras_train',
-    # '/home/cwh/coding/data/cwh/test1',
+    '/home/lixihua/datas/dogs_recognition/keras_train',
     target_size=(299, 299),
     # batch_size=1,
     batch_size=batch_size,
     class_mode='categorical')
 validation_generator = test_datagen.flow_from_directory(
-    '/hdd/cwh/dog_keras_valid',
-    # '/home/cwh/coding/data/cwh/test1',
+    '/home/lixihua/datas/dogs_recognition/keras_valid',
     target_size=(299, 299),
     # batch_size=1,
     batch_size=batch_size,
@@ -178,3 +176,4 @@ model.fit_generator(triple_generator(train_generator),
                     validation_steps=1800 / batch_size + 1,
                     callbacks=[early_stopping, auto_lr, save_model])  # otherwise the generator would loop indefinitely
 model.save('dog_single_xception_tuned.h5')
+

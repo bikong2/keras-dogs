@@ -1,3 +1,5 @@
+# @author: lixihua9@126.com
+
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint, LearningRateScheduler
 from keras.models import load_model
 import os
@@ -6,7 +8,7 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.backend.tensorflow_backend import set_session
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 import tensorflow as tf
 import numpy as np
 
@@ -21,13 +23,13 @@ train_datagen = ImageDataGenerator(rescale=1./255)
 test_datagen = ImageDataGenerator(rescale=1./255)
 
 train_generator = train_datagen.flow_from_directory(
-        '/hdd/cwh/dog_keras_train',
+        '/home/lixihua/datas/dogs_recognition/keras_train',
         target_size=(299, 299),
         batch_size=batch_size,
         class_mode='categorical')
 
 validation_generator = test_datagen.flow_from_directory(
-        '/hdd/cwh/dog_keras_valid',
+        '/home/lixihua/datas/dogs_recognition/keras_valid',
         target_size=(299, 299),
         batch_size=batch_size,
         class_mode='categorical')

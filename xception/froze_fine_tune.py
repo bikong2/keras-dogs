@@ -1,9 +1,10 @@
-import os
+# @author: lixihua9@126.com
 
+import os
 import keras
 import numpy as np
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 import tensorflow as tf
 from keras import Input
 from keras import backend as K
@@ -29,16 +30,14 @@ test_datagen = ImageDataGenerator(rescale=1./255)
 
 batch_size = 64
 train_generator = train_datagen.flow_from_directory(
-        '/hdd/cwh/dog_keras_train',
-        # '/home/cwh/coding/data/cwh/test1',
+        '/home/lixihua/datas/dogs_recognition/keras_train',
         target_size=(299, 299),
         # batch_size=1,
         batch_size=batch_size,
         class_mode='categorical')
 
 validation_generator = test_datagen.flow_from_directory(
-        '/hdd/cwh/dog_keras_valid',
-        # '/home/cwh/coding/data/cwh/test1',
+        '/home/lixihua/datas/dogs_recognition/keras_train',
         target_size=(299, 299),
         # batch_size=1,
         batch_size=batch_size,
@@ -184,8 +183,7 @@ else:
 # and train the remaining top layers.
 
 train_generator = test_datagen.flow_from_directory(
-        '/hdd/cwh/dog_keras_train',
-        # '/home/cwh/coding/data/cwh/test1',
+        '/home/lixihua/datas/dogs_recognition/keras_train',
         target_size=(299, 299),
         # batch_size=1,
         batch_size=batch_size,

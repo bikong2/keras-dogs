@@ -1,9 +1,13 @@
+# @author: lixihua9@126.com
+# @date:   20170925
+# @brief:  testing
+
 import operator
 from os import remove, path
 import os
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 import numpy as np
 from keras.models import load_model
 from keras.preprocessing.image import ImageDataGenerator
@@ -16,7 +20,7 @@ model = load_model('xception-tuned-cont04-0.79.h5')
 plot_model(model, to_file='single_model.png')
 test_datagen = ImageDataGenerator(rescale=1. / 255, )
 valid_generator = test_datagen.flow_from_directory(
-    '/hdd/cwh/dog_keras_valid',
+    '/home/lixihua/datas/dogs_recognition/keras_valid',
     target_size=(299, 299),
     batch_size=batch_size,
     shuffle=False,
@@ -26,7 +30,7 @@ print(valid_generator.class_indices)
 
 label_idxs = sorted(valid_generator.class_indices.items(), key=operator.itemgetter(1))
 test_generator = test_datagen.flow_from_directory(
-    '/hdd/cwh/test',
+    '/home/lixihua/datas/dogs_recognition/keras_valid',
     target_size=(299, 299),
     batch_size=batch_size,
     shuffle=False,
